@@ -67,6 +67,8 @@ public class Login extends AppCompatActivity {
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         Log.d(TAG, "onComplete: userSignedUp- " + user.getEmail());
                                         finish();
+                                    } else {
+                                        Log.d(TAG, "onComplete: userSignUp FAILED!");
                                     }
                                 }
                             });
