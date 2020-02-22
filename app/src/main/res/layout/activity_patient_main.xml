@@ -34,4 +34,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Request for becoming doctor" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Record"
+        android:id="@+id/recordBtn"
+        android:layout_alignBaseline="@id/reqDocBtn"
+        android:layout_marginLeft="10dp"/>
 </RelativeLayout>

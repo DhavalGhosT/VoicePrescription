@@ -59,7 +59,5 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        Intent intent=new Intent(MainActivity.this,SpeechToText.class);
-        startActivity(intent);
     }
 }

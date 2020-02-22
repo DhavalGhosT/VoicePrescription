@@ -2,6 +2,7 @@ package com.example.voiceprescription;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,12 +21,22 @@ public class PatientMain extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Button signOutBtn = findViewById(R.id.signOutBtn);
+        Button recordBtn = findViewById(R.id.recordBtn);
+
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
                 Log.d(TAG, "onClick: signed Out");
                 finish();
+            }
+        });
+
+        recordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(PatientMain.this, SpeechToText.class);
+                startActivity(intent);
             }
         });
     }
