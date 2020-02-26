@@ -30,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
+
 public class SpeechToText extends AppCompatActivity implements RecognitionListener {
 
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -331,6 +332,12 @@ public class SpeechToText extends AppCompatActivity implements RecognitionListen
 
 
         return false;
+    }
+
+    public void DoctorsUI(View view){
+
+        Intent intent=new Intent(this,DoctorScreen.class);
+        startActivity(intent);
     }
 
 }
