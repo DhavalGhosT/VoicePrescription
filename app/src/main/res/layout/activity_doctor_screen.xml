@@ -28,12 +28,12 @@
         />
 
     <Button
+        android:id="@+id/newPresBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Prescription"
         android:layout_margin="20dp"
-        android:textSize="20dp"
-        />
+        android:text="New Prescription"
+        android:textSize="20dp" />
 
     <Button
         android:layout_width="match_parent"
@@ -53,12 +53,12 @@
         />
 
     <Button
+        android:id="@+id/signOutBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Out"
         android:layout_margin="20dp"
-        android:textSize="20dp"
-        />
+        android:text="Sign Out"
+        android:textSize="20dp" />
 
 
 

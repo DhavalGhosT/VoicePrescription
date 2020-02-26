@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.voiceprescription.models.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,12 +26,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 321;
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private GoogleSignInClient mGoogleSignInClient;
 
     @Override
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         Button signUpEmailBtn = findViewById(R.id.signUpEmailBtn);
         Button signInEmailBtn = findViewById(R.id.signInEmailBtn);
@@ -85,9 +91,29 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             Log.d(TAG, "onStart: user- " + user.getEmail());
-            Intent intent = new Intent(getApplicationContext(), PatientMain.class);
-            intent.putExtra("com.example.voiceprescription.LOGIN", true);
-            startActivity(intent);
+            DocumentReference ref = db.collection("users").document(user.getUid());
+            ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot doc = task.getResult();
+                        if (doc.exists()) {
+                            User user = doc.toObject(User.class);
+                            Log.d(TAG, "onComplete: UserClass data: " + user.toString());
+                            Log.d(TAG, "onComplete: USER.Data" + doc.getData());
+                            if (user.getType().equals("patient")) {
+                                Intent intent = new Intent(getApplicationContext(), PatientMain.class);
+                                intent.putExtra("com.example.voiceprescription.LOGIN", true);
+                                startActivity(intent);
+                            } else if (user.getType().equals("doctor")) {
+                                Intent intent = new Intent(getApplicationContext(), DoctorScreen.class);
+                                intent.putExtra("com.example.voiceprescription.LOGIN", true);
+                                startActivity(intent);
+                            }
+                        } else Log.d(TAG, "onComplete: no data found!!");
+                    } else Log.d(TAG, "onComplete: get failed with " + task.getException());
+                }
+            });
         }
 
     }
@@ -113,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle: " + account.getId());
-
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -121,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: signInWithCredential-success");
-                            Intent intent = new Intent(getApplicationContext(), PatientMain.class);
-                            intent.putExtra("com.example.voiceprescription.LOGIN", true);
-                            startActivity(intent);
+//                            Intent intent = new Intent(getApplicationContext(), PatientMain.class);
+//                            intent.putExtra("com.example.voiceprescription.LOGIN", true);
+//                            startActivity(intent);
                         } else {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();

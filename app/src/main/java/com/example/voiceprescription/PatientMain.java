@@ -21,7 +21,6 @@ public class PatientMain extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Button signOutBtn = findViewById(R.id.signOutBtn);
-        Button recordBtn = findViewById(R.id.recordBtn);
 
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,13 +31,6 @@ public class PatientMain extends AppCompatActivity {
             }
         });
 
-        recordBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(PatientMain.this, SpeechToText.class);
-                startActivity(intent);
-            }
-        });
     }
 
 
