@@ -1,14 +1,14 @@
 package com.example.voiceprescription;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -17,14 +17,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 
 public class SpeechToText extends AppCompatActivity implements RecognitionListener {
 
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
+    private static  String TAG = "for permission: ";
     private EditText returnedText;
 //    private TextView returnedError;
     private ProgressBar progressBar;
@@ -32,6 +41,7 @@ public class SpeechToText extends AppCompatActivity implements RecognitionListen
     private Intent recognizerIntent;
     private String LOG_TAG = "VoiceRecognitionActivity";
 //    private Button start,stop;
+    Button CreatePdf;
 
     private void resetSpeechRecognizer() {
 
@@ -67,6 +77,7 @@ public class SpeechToText extends AppCompatActivity implements RecognitionListen
 //        returnedError = findViewById(R.id.errorView1);
         progressBar =  findViewById(R.id.progressBar1);
         progressBar.setVisibility(View.INVISIBLE);
+//        btnCreate = (Button)findViewById(R.id.create);
 
 
         // start speech recogniser
@@ -249,6 +260,77 @@ public class SpeechToText extends AppCompatActivity implements RecognitionListen
                 break;
         }
         return message;
+    }
+
+    public void CreatePdf(View view){
+
+        Boolean check= checkPermissionFunction();
+
+        if(check){
+
+        }else {
+            return;
+        }
+
+        String text=returnedText.getText().toString();
+
+        PdfDocument document=new PdfDocument();
+
+        PdfDocument.PageInfo pageInfo=new PdfDocument.PageInfo.Builder(300,600,1).create();
+
+        PdfDocument.Page page = document.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+        Paint paint = new Paint();
+//        paint.setColor(Color.RED);
+//        canvas.drawCircle(50, 50, 30, paint);
+        paint.setColor(Color.BLACK);
+
+        int x = 10, y=25;
+
+        for (String line:text.split("\\n")){
+            page.getCanvas().drawText(line, x, y, paint);
+            y+=paint.descent()-paint.ascent();
+        }
+
+//        canvas.drawText(text, 80, 100, paint);
+
+        document.finishPage(page);
+
+        String directory_path = Environment.getExternalStorageDirectory().getPath()+"/VoicePrescription";
+
+        File file = new File(directory_path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        String targetPdf = directory_path;
+        File filePath = new File(targetPdf,"prescription.pdf");
+//        filePath.mkdir();
+        try {
+            document.writeTo(new FileOutputStream(filePath));
+            Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Log.e("main", "error "+e.toString());
+            Toast.makeText(this, "Something wrong: " + e.toString(),  Toast.LENGTH_LONG).show();
+        }
+        // close the document
+        document.close();
+
+
+    }
+
+    public boolean checkPermissionFunction(){
+        int permission = PermissionChecker.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission == PermissionChecker.PERMISSION_GRANTED) {
+            Log.v(TAG,"Permission is granted");
+            //File write logic here
+            return true;
+        }
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10);
+
+
+
+        return false;
     }
 
 }
