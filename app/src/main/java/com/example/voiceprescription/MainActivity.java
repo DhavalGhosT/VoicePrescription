@@ -88,9 +88,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+//        FirebaseUser user = mAuth.getCurrentUser();
+        checkLoggedInUser();
+    }
+
+    public void checkLoggedInUser() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            Log.d(TAG, "onStart: user- " + user.getEmail());
+            Log.d(TAG, "checkLoggedInUser: user- " + user.getEmail());
             DocumentReference ref = db.collection("users").document(user.getUid());
             ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -115,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     public void signIn() {
@@ -146,9 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: signInWithCredential-success");
-//                            Intent intent = new Intent(getApplicationContext(), PatientMain.class);
-//                            intent.putExtra("com.example.voiceprescription.LOGIN", true);
-//                            startActivity(intent);
+                            checkLoggedInUser();
                         } else {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
