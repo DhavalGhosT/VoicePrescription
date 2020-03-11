@@ -117,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), DoctorScreen.class);
                                 intent.putExtra("com.example.voiceprescription.LOGIN", true);
                                 startActivity(intent);
+                            } else if (user.getType().equals("admin")) {
+                                Intent intent = new Intent(getApplicationContext(), Admin.class);
+                                intent.putExtra("com.example.voiceprescription.LOGIN", true);
+                                startActivity(intent);
                             }
                         } else Log.d(TAG, "onComplete: no data found!!");
                     } else Log.d(TAG, "onComplete: get failed with " + task.getException());
