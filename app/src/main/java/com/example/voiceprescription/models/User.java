@@ -4,15 +4,25 @@ import androidx.annotation.NonNull;
 
 public class User {
     String name, email, type, photoUrl, phone;
+    boolean requestForDoctor;
 
     public User () {}
 
-    public User(String name, String email, String type, String photoUrl, String phone) {
+    public User(String name, String email, String type, String photoUrl, String phone, boolean requestForDoctor) {
         this.name = name;
         this.email = email;
         this.type = type;
         this.photoUrl = photoUrl;
         this.phone = phone;
+        this.requestForDoctor = requestForDoctor;
+    }
+
+    public boolean isRequestForDoctor() {
+        return requestForDoctor;
+    }
+
+    public void setRequestForDoctor(boolean requestForDoctor) {
+        this.requestForDoctor = requestForDoctor;
     }
 
     public String getName() {
@@ -60,7 +70,8 @@ public class User {
     public String toString() {
         return "Name: " + this.name + ", Email: " + this.email + ", Type: " + this.type +
                 "\nPhotoURL: " + this.photoUrl +
-                "\nPhone: " + this.phone;
+                "\nPhone: " + this.phone +
+                "\nRequest for becoming doctor: " + this.requestForDoctor;
     }
 }
 

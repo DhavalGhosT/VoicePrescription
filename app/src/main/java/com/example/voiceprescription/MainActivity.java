@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
                             if (user.getType().equals("patient")) {
                                 Intent intent = new Intent(getApplicationContext(), PatientMain.class);
                                 intent.putExtra("com.example.voiceprescription.LOGIN", true);
+                                if (user.isRequestForDoctor()) {
+                                    intent.putExtra("com.example.voiceprescription.REQFLAG", true);
+                                }
                                 startActivity(intent);
                             } else if (user.getType().equals("doctor")) {
                                 Intent intent = new Intent(getApplicationContext(), DoctorScreen.class);
