@@ -3,7 +3,7 @@ package com.example.voiceprescription.models;
 import com.google.firebase.Timestamp;
 
 public class Request {
-    String from, docUrl,fileUrl;
+    String from, docUrl;
     Timestamp timeStamp;
 
     public Request() {
@@ -12,7 +12,6 @@ public class Request {
     public Request(String from, String docUrl,String fileUrl, Timestamp timeStamp) {
         this.from = from;
         this.docUrl = docUrl;
-        this.fileUrl=fileUrl;
         this.timeStamp = timeStamp;
     }
 
@@ -32,13 +31,7 @@ public class Request {
         this.docUrl = docUrl;
     }
 
-    public  String getFileUrl(){
-        return  fileUrl;
-    }
 
-    public void setFileUrl(String fileUrl){
-        this.fileUrl=fileUrl;
-    }
 
     public Timestamp getTimeStamp() {
         return timeStamp;

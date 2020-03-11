@@ -24,7 +24,6 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,8 +34,9 @@ public class ApplyForDoctor extends AppCompatActivity {
     FirebaseStorage storage;
     private FirebaseAuth mAuth;
     StorageReference storageReference;
+    private Uri url;
 
-    private static final String TAG = "PatientMain";
+    private static final String TAG = "ApplyForDoctor";
 
     private Button upload;
 //    private RelativeLayout relativeLayout;
@@ -86,8 +86,9 @@ public class ApplyForDoctor extends AppCompatActivity {
 //                final HashMap<String, Object> docData=new HashMap<>();
 
                 // Defining the child of storageReference
-                final String random=UUID.randomUUID().toString();
-                StorageReference ref = storageReference.child(random);
+//                final String random=UUID.randomUUID().toString();
+                final StorageReference ref = storageReference.child(filePath.getLastPathSegment());
+                Log.d(TAG," image name "+ref);
 
 //                docData.put("Images", Arrays.asList(random));
 
@@ -100,58 +101,54 @@ public class ApplyForDoctor extends AppCompatActivity {
                                 UploadTask.TaskSnapshot taskSnapshot)
                         {
 
-                            // Image uploaded successfully
-                            // Dismiss dialog
-                            progressDialog.dismiss();
-                            Toast.makeText(ApplyForDoctor.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    url = (uri);
+                                    Log.d(TAG, " image ka url " + String.valueOf(url));
 
-                            Log.d(TAG, "onClick: trying request!");
-                            Map<String, Object> request = new HashMap<>();
-                            Map<String, Object> reqFlag = new HashMap<>();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            request.put("from", user.getUid());
-                            request.put("docUrl", "TBD");
-                            request.put("timeStamp", new Timestamp(new Date()));
-                            reqFlag.put("requestForDoctor", true);
-                            request.put("filrUrl",random);
-                            Log.d(TAG, "onClick: objects created.");
-                            db.collection("requests").document()
-                                    .set(request)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "onSuccess: request added!");
+
+//
+                                    progressDialog.dismiss();
+                                    Toast.makeText(ApplyForDoctor.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                                    Log.d(String.valueOf(url), "Inside data bases reference");
+
+
+                                    Log.d(TAG, "onClick: trying request!");
+                                    Map<String, Object> request = new HashMap<>();
+                                    Map<String, Object> reqFlag = new HashMap<>();
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    request.put("from", user.getUid());
+                                    Log.d(TAG, "Inside ref above request.put docurl " + String.valueOf(url));
+                                    request.put("docUrl", String.valueOf(url));
+                                    request.put("timeStamp", new Timestamp(new Date()));
+                                    reqFlag.put("requestForDoctor", true);
+//                            request.put("filrUrl",random);
+                                    Log.d(TAG, "onClick: objects created.");
+                                    db.collection("requests").document()
+                                            .set(request)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "onSuccess: request added!");
 //                                            reqDocBtn.setEnabled(false);
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, "onFailure: request failed!");
-                                        }
-                                    });
-                            db.collection("users")
-                                    .document(user.getUid())
-                                    .set(reqFlag, SetOptions.merge());
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "onFailure: request failed!");
+                                                }
+                                            });
+                                    db.collection("users")
+                                            .document(user.getUid())
+                                            .set(reqFlag, SetOptions.merge());
 
-//                            db.collection("applyfordoctor").document(user.getUid()).set(random)
-//                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                        @Override
-//                                        public void onSuccess(Void aVoid) {
-//                                            Toast.makeText(ApplyForDoctor.this,"Done with Uploading",Toast.LENGTH_SHORT)
-//                                                    .show();
-//                                        }
-//                                    })
-//                                    .addOnFailureListener(new OnFailureListener() {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e) {
-//                                            Toast.makeText(ApplyForDoctor.this,"Error"+e.toString(),Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-
-                            Intent intent=new Intent(ApplyForDoctor.this,PatientMain.class);
-                            intent.putExtra("com.example.voiceprescription.REQFLAG", true);
-                            startActivity(intent);
+                                    Intent intent = new Intent(ApplyForDoctor.this, PatientMain.class);
+                                    intent.putExtra("com.example.voiceprescription.REQFLAG", true);
+                                    startActivity(intent);
+                                }
+                            });
 
 
                         }
