@@ -6,9 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class DoctorScreen extends AppCompatActivity {
     private static final String TAG = "DoctorScreen";
@@ -42,4 +42,13 @@ public class DoctorScreen extends AppCompatActivity {
             }
         });
     }
+
+    public void applyfordoctor(View view) {
+
+
+
+        Intent intent=new Intent(DoctorScreen.this,ApplyForDoctor.class);
+        startActivity(intent);;
+    }
+
 }

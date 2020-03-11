@@ -8,7 +8,6 @@
     tools:context=".DoctorScreen">
 
 
-
     <SearchView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,8 +22,6 @@
         android:text="Add New Patient"
         android:layout_margin="20dp"
         android:textSize="20dp"
-
-
         />
 
     <Button
@@ -53,12 +50,22 @@
         />
 
     <Button
+        android:id="@+id/applyfordoctor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Apply for Doctor"
+        android:textSize="20dp"
+        android:onClick="applyfordoctor"/>
+
+    <Button
         android:id="@+id/signOutBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="Sign Out"
         android:textSize="20dp" />
+
 
 
 
