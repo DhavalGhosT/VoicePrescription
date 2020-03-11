@@ -49,14 +49,7 @@
 
         />
 
-    <Button
-        android:id="@+id/applyfordoctor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Apply for Doctor"
-        android:textSize="20dp"
-        android:onClick="applyfordoctor"/>
+
 
     <Button
         android:id="@+id/signOutBtn"

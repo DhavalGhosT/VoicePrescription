@@ -43,12 +43,6 @@ public class DoctorScreen extends AppCompatActivity {
         });
     }
 
-    public void applyfordoctor(View view) {
 
-
-
-        Intent intent=new Intent(DoctorScreen.this,ApplyForDoctor.class);
-        startActivity(intent);;
-    }
 
 }
