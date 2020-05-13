@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +24,11 @@ public class PatientMain extends AppCompatActivity {
         setContentView(R.layout.activity_patient_main);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
 
         Button signOutBtn = findViewById(R.id.signOutBtn);
+        Button chatBtn = findViewById(R.id.pChatBtn);
+        TextView nameTV = findViewById(R.id.uidTextView);
         final Button reqDocBtn = findViewById(R.id.reqDocBtn);
 
         final Intent intent = getIntent();
@@ -33,12 +38,24 @@ public class PatientMain extends AppCompatActivity {
             reqDocBtn.setText("Application Under Review");
         }
 
+        if (user.getDisplayName() == null) nameTV.setText(user.getEmail());
+        else nameTV.setText(user.getDisplayName());
+
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
                 Log.d(TAG, "onClick: signed Out");
                 finish();
+            }
+        });
+
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PatientMain.this, ChatMain.class);
+                intent.putExtra("CURR_USER_CAN_CHAT_TYPE", "doctor");
+                startActivity(intent);
             }
         });
 

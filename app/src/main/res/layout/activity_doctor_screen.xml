@@ -41,13 +41,13 @@
         />
 
     <Button
+        android:id="@+id/chatBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chats"
         android:layout_margin="20dp"
-        android:textSize="20dp"
+        android:text="Chats"
 
-        />
+        android:textSize="20dp" />
 
 
 

@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Admin"></activity>
+        <activity android:name=".ChatWindow"></activity>
+        <activity android:name=".ChatMain" />
+        <activity android:name=".Admin" />
         <activity android:name=".ApplyForDoctor" />
         <activity android:name=".DoctorScreen" />
         <activity android:name=".Login" />

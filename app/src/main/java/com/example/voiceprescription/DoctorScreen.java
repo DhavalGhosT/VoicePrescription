@@ -24,11 +24,12 @@ public class DoctorScreen extends AppCompatActivity {
 
         Button newPresBtn = findViewById(R.id.newPresBtn);
         Button signOutBtn = findViewById(R.id.signOutBtn);
+        Button chatBtn = findViewById(R.id.chatBtn);
 
         newPresBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(DoctorScreen.this, SpeechToText.class);
+                Intent intent = new Intent(DoctorScreen.this, SpeechToText.class);
                 startActivity(intent);
             }
         });
@@ -41,6 +42,16 @@ public class DoctorScreen extends AppCompatActivity {
                 finish();
             }
         });
+
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoctorScreen.this, ChatMain.class);
+                intent.putExtra("CURR_USER_CAN_CHAT_TYPE", "patient");
+                startActivity(intent);
+            }
+        });
+
     }
 
 
